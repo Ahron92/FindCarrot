@@ -19,6 +19,12 @@ let started = false;
 let score = 0;
 let countDown = undefined;
 
+const carrotSound = new Audio("./sound/carrot_pull.mp3");
+const alertSound = new Audio("./sound/alert.wav");
+const bgSound = new Audio("./sound/bg.mp3");
+const bugSound = new Audio("./sound/bug_pull.mp3");
+const winSound = new Audio("./sound/game_win.mp3");
+
 playBtn.addEventListener("click", () => {
   gameStart();
 });
@@ -28,12 +34,14 @@ function gameStart() {
     hideBtn();
     stopCountDown();
     showPopUp("REPLAY? ⛏");
+    stopSound(bgSound);
+    playSound(alertSound);
   } else {
-    score = 0;
     initGame();
     showTimeAndCount();
     startCountDown();
     stopBtn();
+    playSound(bgSound);
   }
   started = !started;
 }
@@ -41,7 +49,13 @@ function gameStart() {
 function finishGame(winOrLose) {
   started = false;
   hideBtn();
+  if (winOrLose) {
+    playSound(winSound);
+  } else {
+    playSound(bugSound);
+  }
   showPopUp(winOrLose ? "You Won🎈" : "You Lose😑");
+  stopSound(bgSound);
 }
 
 popIcon.addEventListener("click", () => {
@@ -55,6 +69,7 @@ itemArea.addEventListener("click", (event) => {
     target.remove();
     score++;
     scoreCountDown();
+    playSound(carrotSound);
   }
   if (CARROT_NUMBER === score) {
     finishGame(true);
@@ -64,6 +79,14 @@ itemArea.addEventListener("click", (event) => {
     stopCountDown();
   }
 });
+
+function playSound(sound) {
+  sound.currentTime = 0;
+  sound.play();
+}
+function stopSound(sound) {
+  sound.pause();
+}
 
 function scoreCountDown() {
   playCount.textContent = CARROT_NUMBER - score;
@@ -109,6 +132,7 @@ function showTimeAndCount() {
 }
 
 function initGame() {
+  score = 0;
   itemArea.innerHTML = "";
   playCount.innerText = CARROT_NUMBER;
   deployment("carrot", CARROT_NUMBER, "./img/carrot.png");
