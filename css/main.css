@@ -60,6 +60,7 @@ body {
   font-size: 2rem;
   font-weight: 700;
   visibility: hidden;
+  user-select: none;
 }
 
 .play__count {
@@ -120,7 +121,14 @@ body {
   font-size: 2rem;
 }
 
+.carrot:hover,
+.bug:hover,
+.bug--crazy:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
 .bug--crazy {
-  width: 7rem;
-  height: 5rem;
+  width: 5rem;
+  height: 3rem;
 }

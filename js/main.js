@@ -10,9 +10,9 @@ const pop = document.querySelector(".pop");
 const popIcon = document.querySelector(".pop__icon");
 const popMessage = document.querySelector(".pop__message");
 
-const CARROT_NUMBER = 8;
-const BUG_NUMBER = 7;
-const CRAZYBUG_NUMBER = 2;
+const CARROT_NUMBER = 12;
+const BUG_NUMBER = 10;
+const CRAZYBUG_NUMBER = 3;
 const CARROT_SIZE = 80;
 const GAME_DURATION = 9;
 let started = false;
@@ -40,7 +40,7 @@ function gameStart() {
     initGame();
     showTimeAndCount();
     startCountDown();
-    stopBtn();
+    showStopBtn();
     playSound(bgSound);
   }
   started = !started;
@@ -59,6 +59,7 @@ function finishGame(winOrLose) {
 }
 
 popIcon.addEventListener("click", () => {
+  showStopBtn();
   hidePopUp();
   gameStart();
 });
@@ -92,8 +93,9 @@ function scoreCountDown() {
   playCount.textContent = CARROT_NUMBER - score;
 }
 
-function stopBtn() {
+function showStopBtn() {
   playBtn.innerHTML = `<i class="fas fa-stop">`;
+  playBtn.style.visibility = "visible";
 }
 function hideBtn() {
   playBtn.style.visibility = "hidden";
