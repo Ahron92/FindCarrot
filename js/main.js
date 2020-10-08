@@ -16,6 +16,7 @@ const CRAZYBUG_NUMBER = 2;
 const CARROT_SIZE = 80;
 const GAME_DURATION = 9;
 let started = false;
+let score = 0;
 let countDown = undefined;
 
 playBtn.addEventListener("click", () => {
@@ -28,12 +29,44 @@ function gameStart() {
     stopCountDown();
     showPopUp("REPLAY? ⛏");
   } else {
+    score = 0;
     initGame();
     showTimeAndCount();
     startCountDown();
     stopBtn();
   }
   started = !started;
+}
+
+function finishGame(winOrLose) {
+  started = false;
+  hideBtn();
+  showPopUp(winOrLose ? "You Won🎈" : "You Lose😑");
+}
+
+popIcon.addEventListener("click", () => {
+  hidePopUp();
+  gameStart();
+});
+
+itemArea.addEventListener("click", (event) => {
+  const target = event.target;
+  if (target.matches(".carrot")) {
+    target.remove();
+    score++;
+    scoreCountDown();
+  }
+  if (CARROT_NUMBER === score) {
+    finishGame(true);
+    stopCountDown();
+  } else if (target.matches(".bug") || target.matches(".bug--crazy")) {
+    finishGame(false);
+    stopCountDown();
+  }
+});
+
+function scoreCountDown() {
+  playCount.textContent = CARROT_NUMBER - score;
 }
 
 function stopBtn() {
@@ -48,21 +81,26 @@ function showPopUp(text) {
   popMessage.textContent = text;
 }
 
-function stopCountDown() {
-  clearInterval(countDown);
+function hidePopUp() {
+  pop.style.display = "none";
 }
 
 function startCountDown() {
   let countNumber = GAME_DURATION;
-  playCount.textContent = countNumber;
+  playTime.textContent = countNumber;
   countDown = setInterval(() => {
     if (countNumber <= 0) {
       clearInterval(countDown);
+      finishGame(CARROT_NUMBER === score);
       return;
     }
     --countNumber;
-    playCount.textContent = countNumber;
+    playTime.textContent = countNumber;
   }, 1000);
+}
+
+function stopCountDown() {
+  clearInterval(countDown);
 }
 
 function showTimeAndCount() {
@@ -72,6 +110,7 @@ function showTimeAndCount() {
 
 function initGame() {
   itemArea.innerHTML = "";
+  playCount.innerText = CARROT_NUMBER;
   deployment("carrot", CARROT_NUMBER, "./img/carrot.png");
   deployment("bug", BUG_NUMBER, "./img/bug.png");
   deployment("bug--crazy", CRAZYBUG_NUMBER, "./img/crazybug.png");
