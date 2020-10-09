@@ -4,7 +4,7 @@ import PopUp from "./popup.js";
 
 const gameFinishBanner = new PopUp();
 gameFinishBanner.setClickListener(() => {
-  gameStart();
+  startGame();
 });
 
 const playBtn = document.querySelector(".play__btn");
@@ -29,24 +29,29 @@ const bugSound = new Audio("./sound/bug_pull.mp3");
 const winSound = new Audio("./sound/game_win.mp3");
 
 playBtn.addEventListener("click", () => {
-  startGame();
+  if (started) {
+    stopGame();
+  } else {
+    startGame();
+  }
 });
 
 function startGame() {
-  if (started) {
-    hideBtn();
-    stopCountDown();
-    gameFinishBanner.showPopUp("REPLAY? ⛏");
-    stopSound(bgSound);
-    playSound(alertSound);
-  } else {
-    initGame();
-    showTimeAndCount();
-    startCountDown();
-    showStopBtn();
-    playSound(bgSound);
-  }
-  started = !started;
+  started = true;
+  initGame();
+  showTimeAndCount();
+  startCountDown();
+  showStopBtn();
+  playSound(bgSound);
+}
+
+function stopGame() {
+  started = false;
+  hideBtn();
+  stopCountDown();
+  gameFinishBanner.showPopUp("REPLAY? ⛏");
+  stopSound(bgSound);
+  playSound(alertSound);
 }
 
 function finishGame(winOrLose) {

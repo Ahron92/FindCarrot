@@ -7,7 +7,7 @@ export default class PopUp {
     this.popMessage = document.querySelector(".pop__message");
     this.popIcon.addEventListener("click", () => {
       this.onClick && this.onClick();
-      hide();
+      this.hide();
     });
   }
 
@@ -21,6 +21,6 @@ export default class PopUp {
   }
 
   hide() {
-    pop.classList.add("pop--hide");
+    this.pop.classList.add("pop--hide");
   }
 }
