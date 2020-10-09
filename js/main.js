@@ -1,14 +1,17 @@
 "use strict";
 
+import PopUp from "./popup.js";
+
+const gameFinishBanner = new PopUp();
+gameFinishBanner.setClickListener(() => {
+  gameStart();
+});
+
 const playBtn = document.querySelector(".play__btn");
 const playTime = document.querySelector(".play__out");
 const playCount = document.querySelector(".play__count");
 const itemArea = document.querySelector(".item-area");
 const itemBoundary = itemArea.getBoundingClientRect();
-
-const pop = document.querySelector(".pop");
-const popIcon = document.querySelector(".pop__icon");
-const popMessage = document.querySelector(".pop__message");
 
 const CARROT_NUMBER = 12;
 const BUG_NUMBER = 10;
@@ -26,14 +29,14 @@ const bugSound = new Audio("./sound/bug_pull.mp3");
 const winSound = new Audio("./sound/game_win.mp3");
 
 playBtn.addEventListener("click", () => {
-  gameStart();
+  startGame();
 });
 
-function gameStart() {
+function startGame() {
   if (started) {
     hideBtn();
     stopCountDown();
-    showPopUp("REPLAY? ⛏");
+    gameFinishBanner.showPopUp("REPLAY? ⛏");
     stopSound(bgSound);
     playSound(alertSound);
   } else {
@@ -54,15 +57,9 @@ function finishGame(winOrLose) {
   } else {
     playSound(bugSound);
   }
-  showPopUp(winOrLose ? "You Won🎈" : "You Lose😑");
+  gameFinishBanner.showPopUp(winOrLose ? "You Won🎈" : "You Lose😑");
   stopSound(bgSound);
 }
-
-popIcon.addEventListener("click", () => {
-  showStopBtn();
-  hidePopUp();
-  gameStart();
-});
 
 itemArea.addEventListener("click", (event) => {
   const target = event.target;
@@ -99,15 +96,6 @@ function showStopBtn() {
 }
 function hideBtn() {
   playBtn.style.visibility = "hidden";
-}
-
-function showPopUp(text) {
-  pop.style.display = "flex";
-  popMessage.textContent = text;
-}
-
-function hidePopUp() {
-  pop.style.display = "none";
 }
 
 function startCountDown() {

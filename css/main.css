@@ -88,7 +88,7 @@ body {
 }
 
 .pop {
-  display: none;
+  display: flex;
   position: absolute;
   bottom: 20%;
   left: 50%;
@@ -101,6 +101,10 @@ body {
   height: 10rem;
   border-radius: 20%;
   transform: translateX(-50%);
+}
+
+.pop--hide {
+  display: none;
 }
 
 .pop__icon {
