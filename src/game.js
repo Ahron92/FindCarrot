@@ -3,7 +3,35 @@
 import * as sound from './sound.js';
 import Field from "./field.js";
 
-export default class Game{
+//build pattern
+export default class GameBuilder{
+  gameDuration(duration){
+    this.gameDuration = duration;
+    return this;
+  }
+  carrotCount(num){
+    this.carrotCount = num;
+    return this;
+  }
+  bugCount(num){
+    this.bugCount = num;
+    return this;
+  }
+  bigBugCount(num){
+    this.bigBugCount = num;
+    return this;
+  }
+  build(){
+    return new Game(
+      this.gameDuration,
+      this.carrotCount,
+      this.bugCount,
+      this.bigBugCount
+    )
+  }
+}
+
+class Game{
   constructor(gameDuration, carrotCount, bugCount, bigBugCount){
     this.gameDuration = gameDuration;
     this.carrotCount = carrotCount;
@@ -58,7 +86,7 @@ export default class Game{
     this.stopCountDown();
     sound.stopBg();
     sound.playAlert();
-    this.onGameStop && this.onGameStop('cansel');
+    this.onGameStop && this.onGameStop('cancel');
   }  
 
   finish(winOrLose) {

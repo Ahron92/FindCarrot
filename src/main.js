@@ -1,14 +1,20 @@
 "use strict";
 
 import PopUp from "./popup.js";
-import Game from "./game.js";
+import GameBuilder from "./game.js";
 
 const gameFinishBanner = new PopUp();
-const game = new Game(8, 5, 5, 3);
+const game = new GameBuilder()
+.gameDuration(8)
+.carrotCount(10)
+.bugCount(12)
+.bigBugCount(2)
+.build();
+
 game.setGameStopListener((reason)=>{
   let message;
   switch(reason){
-    case 'cansel':
+    case 'cancel':
       message = 'Replay❓'
     break;
     case 'win':
