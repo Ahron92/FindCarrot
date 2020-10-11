@@ -2,6 +2,7 @@
 
 import PopUp from "./popup.js";
 import Field from "./field.js";
+import * as sound from './sound.js';
 
 const playBtn = document.querySelector(".play__btn");
 const playTime = document.querySelector(".play__out");
@@ -15,11 +16,6 @@ const GAME_DURATION = 9;
 let started = false;
 let score = 0;
 let countDown = undefined;
-
-const alertSound = new Audio("./sound/alert.wav");
-const bgSound = new Audio("./sound/bg.mp3");
-const bugSound = new Audio("./sound/bug_pull.mp3");
-const winSound = new Audio("./sound/game_win.mp3");
 
 const gameFinishBanner = new PopUp();
 gameFinishBanner.setClickListener(() => {
@@ -55,13 +51,14 @@ playBtn.addEventListener("click", () => {
   }
 });
 
+
 function startGame() {
   started = true;
   initGame();
   showTimeAndCount();
   startCountDown();
   showStopBtn();
-  playSound(bgSound);
+  sound.playBg();
 }
 
 function stopGame() {
@@ -69,28 +66,21 @@ function stopGame() {
   hideBtn();
   stopCountDown();
   gameFinishBanner.showPopUp("REPLAY? ⛏");
-  stopSound(bgSound);
-  playSound(alertSound);
+  sound.stopBg();
+  sound.playAlert(
+  );
 }
 
 function finishGame(winOrLose) {
   started = false;
   hideBtn();
   if (winOrLose) {
-    playSound(winSound);
+    sound.playWin();
   } else {
-    playSound(bugSound);
+    sound.playBug();
   }
   gameFinishBanner.showPopUp(winOrLose ? "You Won🎈" : "You Lose😑");
-  stopSound(bgSound);
-}
-
-function playSound(sound) {
-  sound.currentTime = 0;
-  sound.play();
-}
-function stopSound(sound) {
-  sound.pause();
+  sound.stopBg();
 }
 
 function showStopBtn() {
@@ -123,6 +113,7 @@ function showTimeAndCount() {
   playTime.style.visibility = "visible";
   playCount.style.visibility = "visible";
 }
+
 
 function initGame() {
   score = 0;

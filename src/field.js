@@ -1,6 +1,7 @@
-"use strict";
+// "use strict";
 
-const carrotSound = new Audio("./sound/carrot_pull.mp3");
+import * as sound from './sound.js';
+
 const CARROT_SIZE = 80;
 
 export default class Field {
@@ -11,7 +12,8 @@ export default class Field {
     this.itemArea = document.querySelector(".item-area");
     this.itemBoundary = this.itemArea.getBoundingClientRect();
     // this.onClick = this.onClick.bind(this);
-    this.itemArea.addEventListener("click", (event) => this.onClick(event));
+    // this.itemArea.addEventListener("click", (event) => this.onClick(event));
+    this.itemArea.addEventListener("click", this.onClick);
   }
 
   init() {
@@ -25,13 +27,14 @@ export default class Field {
     this.onItemClick = onItemClick;
   }
 
+
+
   _deployment(className, number, imgPath) {
     //private 한 함수를 만들기위해 _ 를 추가 외부에서 부르지 말것!
     const x = 0;
     const y = 0;
     const widthX = this.itemBoundary.width - CARROT_SIZE;
     const heightY = this.itemBoundary.height - CARROT_SIZE;
-
     for (let i = 0; i < number; i++) {
       const item = document.createElement("img");
       item.setAttribute("class", className);
@@ -45,11 +48,12 @@ export default class Field {
     }
   }
 
-  onClick = (event) => {
+
+  onClick = (event) =>{
     const target = event.target;
     if (target.matches(".carrot")) {
       target.remove();
-      playSound(carrotSound);
+      sound.playCarrot();
       this.onItemClick && this.onItemClick("carrot");
     } else if (target.matches(".bug") || target.matches(".bug--crazy")) {
       this.onItemClick && this.onItemClick("bug");
@@ -59,9 +63,4 @@ export default class Field {
 
 function randomNumber(min, max) {
   return Math.random() * (max - min) + min;
-}
-
-function playSound(sound) {
-  sound.currentTime = 0;
-  sound.play();
 }
