@@ -4,7 +4,13 @@ import * as sound from './sound.js';
 
 const CARROT_SIZE = 80;
 
-export default class Field {
+export const itemType = Object.freeze({
+  bug : 'bug',
+  carrot : 'carrot',
+  bigBug : 'bug--crazy'
+})
+
+export class Field {
   constructor(carrotCount, bugCount, crazyBug) {
     this.carrotCount = carrotCount;
     this.bugCount = bugCount;
@@ -18,9 +24,9 @@ export default class Field {
 
   init() {
     this.itemArea.innerHTML = "";
-    this._deployment("carrot", this.carrotCount, "./img/carrot.png");
-    this._deployment("bug", this.bugCount, "./img/bug.png");
-    this._deployment("bug--crazy", this.crazyBug, "./img/crazybug.png");
+    this._deployment(itemType.carrot, this.carrotCount, "./img/carrot.png");
+    this._deployment(itemType.bug, this.bugCount, "./img/bug.png");
+    this._deployment(itemType.bigBug, this.crazyBug, "./img/crazybug.png");
   }
 
   setClickListener(onItemClick) {
@@ -51,12 +57,12 @@ export default class Field {
 
   onClick = (event) =>{
     const target = event.target;
-    if (target.matches(".carrot")) {
+    if (target.matches('.carrot')) {
       target.remove();
       sound.playCarrot();
-      this.onItemClick && this.onItemClick("carrot");
-    } else if (target.matches(".bug") || target.matches(".bug--crazy")) {
-      this.onItemClick && this.onItemClick("bug");
+      this.onItemClick && this.onItemClick(itemType.carrot);
+    } else if (target.matches('.bug') || target.matches('.bug--crazy')) {
+      this.onItemClick && this.onItemClick(itemType.bug);
     }
   };
 }

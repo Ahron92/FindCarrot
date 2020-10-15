@@ -1,10 +1,16 @@
 'use strict'
 
+import {Field, itemType} from "./field.js";
 import * as sound from './sound.js';
-import Field from "./field.js";
+
+export const Reason = Object.freeze({
+  win: 'win',
+  lose: 'lose',
+  cancel : 'cancel'
+})
 
 //build pattern
-export default class GameBuilder{
+export class GameBuilder{
   gameDuration(duration){
     this.gameDuration = duration;
     return this;
@@ -43,7 +49,7 @@ class Game{
     this.playBtn = document.querySelector(".play__btn");
     this.playBtn.addEventListener("click", () => {
       if (this.started) {
-        this.stop();
+        this.stop(Reason.cancel);
       } else {
         this.start();
       }
@@ -59,15 +65,15 @@ class Game{
     this.onGameStop = onGameStop;
   }
   onItemClick = (item) =>{
-    if (item === "carrot") {
+    if (item === itemType.carrot) {
       this.score++;
       this.scoreCountDown();
       if (this.carrotCount === this.score) {
-        this.finish(true);
+        this.stop(Reason.win);
         this.stopCountDown();
       }
-    } else if (item === "bug") {
-      this.finish(false);
+    } else if (item === itemType.bug) {
+      this.stop(Reason.lose);
       this.stopCountDown();
     }
   }
@@ -80,26 +86,13 @@ class Game{
     sound.playBg();
   }
   
-  stop() {
+  stop(reason) {
     this.started = false;
     this.hideBtn();
     this.stopCountDown();
-    sound.stopBg();
-    sound.playAlert();
-    this.onGameStop && this.onGameStop('cancel');
+    sound.stopBg()
+    this.onGameStop && this.onGameStop(reason);
   }  
-
-  finish(winOrLose) {
-    this.started = false;
-    this.hideBtn();
-    if (winOrLose) {
-      sound.playWin();
-    } else {
-      sound.playBug();
-    }
-    this.onGameStop && this.onGameStop(winOrLose ? 'win' : 'lose');
-    sound.stopBg();
-  }
 
   
   scoreCountDown() {
