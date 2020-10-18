@@ -1,6 +1,7 @@
 // "use strict";
 
 import * as sound from './sound.js';
+import {started} from './game.js';
 
 const CARROT_SIZE = 80;
 
@@ -56,6 +57,9 @@ export class Field {
 
 
   onClick = (event) =>{
+    if(started === false){
+      return;
+    }
     const target = event.target;
     if (target.matches('.carrot')) {
       target.remove();

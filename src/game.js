@@ -3,6 +3,7 @@
 import {Field, itemType} from "./field.js";
 import * as sound from './sound.js';
 
+export let started = false;
 export const Reason = Object.freeze({
   win: 'win',
   lose: 'lose',
@@ -48,7 +49,7 @@ class Game{
     this.playCount = document.querySelector(".play__count");
     this.playBtn = document.querySelector(".play__btn");
     this.playBtn.addEventListener("click", () => {
-      if (this.started) {
+      if (started) {
         this.stop(Reason.cancel);
       } else {
         this.start();
@@ -56,8 +57,6 @@ class Game{
     });
     this.gameField = new Field(carrotCount, bugCount, bigBugCount);
     this.gameField.setClickListener(this.onItemClick);
-
-    this.started = false;
     this.score = 0;
     this.countDown = undefined;
   }
@@ -78,7 +77,7 @@ class Game{
     }
   }
   start() {
-    this.started = true;
+    started = true;
     this.initGame();
     this.showTimeAndCount();
     this.startCountDown();
@@ -87,7 +86,7 @@ class Game{
   }
   
   stop(reason) {
-    this.started = false;
+    started = false;
     this.hideBtn();
     this.stopCountDown();
     sound.stopBg()
